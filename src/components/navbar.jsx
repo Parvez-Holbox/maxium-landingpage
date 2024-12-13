@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import Modal from './modal'
 
 export default function Navbar() {
+
   return (
     <motion.nav 
       initial={{ y: -100 }}

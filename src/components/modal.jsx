@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { motion, AnimatePresence } from 'framer-motion'
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -7,37 +7,38 @@ import "react-toastify/dist/ReactToastify.css";
 
 const Modal = () => {
     const [showModal, setShowModal] = useState(false);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);    
 
-    const toggleModal = () => {
-        setShowModal(!showModal);
-    };
+    const toggleModal = useCallback(() => {
+        setShowModal(prev => !prev); // Toggle the modal state
+        setIsLoading(false); // Reset loading state
+      }, []);
 
-    const sendEmail = (e) => {
+      const sendEmail = (e) => {
         e.preventDefault();
         setIsLoading(true);
         emailjs
-            .sendForm(
-                import.meta.env.VITE_EMAILJS_SERVICE_ID,  // Replace with your actual service ID
-                import.meta.env.VITE_EMAILJS_TEMPLATE_ID, // Replace with your actual template ID
-                e.target,
-                import.meta.env.VITE_EMAILJS_USER_ID      // Replace with your actual user ID
-            )
-            .then(
-                (result) => {
-                    console.log("Success:", result); // Debug log
-                    toast.success("We'll get back to you shortly.");
-                    e.target.reset();
-                    setShowModal(false);
-                    setIsLoading(false);
-                },
-                (error) => {
-                    console.error("Error:", error); // Debug log
-                    toast.error("There was an issue sending your request. Please try again.");
-                    setIsLoading(false);
-                }
-            );
-    };
+          .sendForm(
+            import.meta.env.VITE_EMAILJS_SERVICE_ID,  // Replace with your actual service ID
+            import.meta.env.VITE_EMAILJS_TEMPLATE_ID, // Replace with your actual template ID
+            e.target,
+            import.meta.env.VITE_EMAILJS_USER_ID      // Replace with your actual user ID
+          )
+          .then(
+            (result) => {
+              console.log("Success:", result); // Debug log
+              toast.success("We'll get back to you shortly.");
+              e.target.reset();
+              toggleModal();
+    
+            },
+            (error) => {
+              console.error("Error:", error); // Debug log
+              toast.error("There was an issue sending your request. Please try again.");
+              toggleModal();
+            }
+          );
+      };
 
     return (
         <>
@@ -132,9 +133,7 @@ const Modal = () => {
                     </motion.div>
                 )}
             </AnimatePresence>
-            <div className="absolute">
-                <ToastContainer />
-            </div>
+            
         </>
     );
 };

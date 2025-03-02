@@ -10,12 +10,7 @@ export default function Footer() {
           <div>
             <h2 className="text-2xl font-bold text-white mb-4">Maxium</h2>
           </div>
-          <div>
-            <h3 className="text-lg font-semibold mb-4">ADDRESS</h3>
-            <p>593 Somerville Avenue
-             <br/>Unit 6, Somerville, MA
-              02143</p>
-          </div>
+          
           <div>
             <h3 className="text-lg font-semibold mb-4">FOLLOW US</h3>
             <div className="space-y-2">
